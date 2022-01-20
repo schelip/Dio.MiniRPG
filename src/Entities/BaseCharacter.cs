@@ -1,130 +1,58 @@
-using Dio.MiniRPG.src.Infrastructure;
+using Dio.MiniRPG.Infrastructure;
 
-namespace Dio.MiniRPG.src.Entities
+namespace Dio.MiniRPG.Entities
 {
-    public abstract class BaseCharacter : BaseNamedEntity, ICharacter
+    public abstract class BaseCharacter : BaseEntity, ICharacter
     {
-        public uint BaseAttackPoints { get; } = 3;
-        public uint BaseDefensePoints { get; }  = 3;
-        public uint BaseEndurancePoints { get; }  = 1;
-        public uint BaseMaxHealthPoints { get; }  = 10;
-        public uint BaseBonusPoints { get; }  = 0;
 
-        public uint Level { get; private set; } = 1;
-        public uint Experience { get; private set; } = 0;
+        public uint LVL { get; protected set; } = 1;
+        public uint EXP { get; protected set; }
+        public double HP { get; protected set; }
+        public double MaxHP { get; protected set; }
+        public double ATK { get; protected set; }
+        public double DEF { get; protected set; }
+        public bool IsDefending { get; protected set; } = false;
+        public double END { get; protected set; }
 
-        public uint AttackPoints { get; private set; }
-        public uint DefensePoints { get; private set; }
-        public uint EndurancePoints { get; private set; }
-        public uint MaxHealthPoints { get; private set; }
-        public uint BonusPoints { get; private set; }
-        public uint RequiredExperiencePoints { get; private set; }
+        public uint RequiredEXP { get; protected set; } = 100;
 
-        public uint HealthPoints { get; private set; }
-        public bool IsDefending { get; private set; } = false;
+        public double MaxHPFactor { get; protected set; }
+        public double ATKFactor { get; protected set; }
+        public double DEFFactor { get; protected set; }
+        public double ENDFactor { get; protected set; }
 
         public BaseCharacter(string name)
         : base(name)
+        { }
+
+        public virtual void ReceiveDamage(double damagePoints) => this.HP -= Math.Min(damagePoints, this.HP);
+
+        public virtual void HealDamage(double healPoints) => this.HP += Math.Min(healPoints, this.MaxHP - this.HP);
+
+        public virtual void StartDefending() => this.IsDefending = true;
+
+        public virtual void StopDefending() => this.IsDefending = false;
+
+        public virtual void ReceiveExperience(uint expPoints)
         {
-            SetAllPointss();
-            this.HealthPoints = this.MaxHealthPoints;
-        }
+            this.EXP += expPoints;
 
-        public BaseCharacter(string name, uint level)
-        : base(name)
-        {
-            this.Level = level;
-            SetAllPointss();
-            this.HealthPoints = this.MaxHealthPoints;
-        }
-
-        public void Attack(ICharacter attackReceiver)
-        {
-            attackReceiver.ReceiveAttack(this.AttackPoints);
-            Console.WriteLine(this.Name + " has attacked " + attackReceiver.Name + "!");
-
-            if (attackReceiver.HealthPoints == 0)
-            {
-                this.ReceiveExperience((uint)(attackReceiver.Level * 1.5 * attackReceiver.BonusPoints));
-                Console.WriteLine(attackReceiver.Name + "has died!");
-            }
-        }
-
-        public void ReceiveAttack(uint attackPoints)
-        {
-            uint damagePoints = attackPoints;
-
-            if (this.IsDefending)
-            {
-                damagePoints -= this.DefensePoints;
-                this.StopDefending();
-            }
-            else
-                damagePoints -= this.EndurancePoints;
-
-            this.ReceiveDamage(damagePoints);
-        }
-
-        public void StartDefending()
-        {
-            this.IsDefending = true;
-        }
-
-        public void StopDefending()
-        {
-            this.IsDefending = false;
-        }
-
-        public void ReceiveDamage(uint damagePoints)
-        {
-            this.HealthPoints -= Math.Min(damagePoints, this.HealthPoints);
-        }
-
-        public void HealDamage(uint healPoints)
-        {
-            this.HealthPoints += Math.Min(healPoints, this.MaxHealthPoints - this.HealthPoints);
-        }
-
-        public void ReceiveExperience(uint expPoints)
-        {
-            this.Experience += expPoints;
-
-            if (this.RequiredExperiencePoints < this.Experience)
+            if (this.RequiredEXP < this.EXP)
                 this.LevelUp();
         }
 
-        public void LevelUp()
+        public virtual void LevelUp()
         {
-            this.Experience = 0;
-            this.Level++;
-            SetAllPointss();
-            this.HealthPoints = this.MaxHealthPoints;
+            this.RequiredEXP += this.LVL * 50;
+            this.LVL++;
+            this.EXP = 0;
+
+            this.MaxHP += this.MaxHPFactor;
+            this.ATK += this.ATKFactor;
+            this.DEF += this.DEFFactor;
+            this.END += this.ENDFactor;
+
+            this.HP = this.MaxHP;
         }
-
-        // Points Calculators
-        protected virtual uint GetAttackPoints() => this.BaseAttackPoints +  (uint)(this.BonusPoints * (0.66));
-        protected virtual uint GetEndurancePoints() => this.BaseEndurancePoints + this.BonusPoints / 3;
-        protected virtual uint GetDefensePoints() => this.BaseDefensePoints + this.BonusPoints / 2;
-        protected virtual uint GetMaxHealthPoints() => this.BaseMaxHealthPoints + (uint)(this.BonusPoints * (1.3));
-        protected virtual uint GetRequiredExperiencePoints() => this.BonusPoints * 50;
-        protected virtual uint GetBonusPoints()
-        {
-            uint bonus = this.BaseBonusPoints;
-            for (uint i = 1; i <= this.Level; i++)
-                bonus += i;
-            return bonus;
-        }
-
-        protected void SetAllPointss()
-        {
-            this.BonusPoints = GetBonusPoints();
-
-            this.AttackPoints = GetAttackPoints();
-            this.EndurancePoints = GetEndurancePoints();
-            this.DefensePoints = GetDefensePoints();
-            this.RequiredExperiencePoints = GetRequiredExperiencePoints();
-            this.MaxHealthPoints = GetMaxHealthPoints();
-        }
-
     }
 }

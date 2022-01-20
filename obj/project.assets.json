@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\School\\DIO\\GFT .NET\\Dio.RPG\\Dio.MiniRPG.csproj",
+      "projectUniqueName": "D:\\School\\DIO\\GFT .NET\\Dio.MiniRPG\\Dio.MiniRPG.csproj",
       "projectName": "Dio.MiniRPG",
-      "projectPath": "D:\\School\\DIO\\GFT .NET\\Dio.RPG\\Dio.MiniRPG.csproj",
+      "projectPath": "D:\\School\\DIO\\GFT .NET\\Dio.MiniRPG\\Dio.MiniRPG.csproj",
       "packagesPath": "C:\\Users\\fcomi\\.nuget\\packages\\",
-      "outputPath": "D:\\School\\DIO\\GFT .NET\\Dio.RPG\\obj\\",
+      "outputPath": "D:\\School\\DIO\\GFT .NET\\Dio.MiniRPG\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\fcomi\\AppData\\Roaming\\NuGet\\NuGet.Config",

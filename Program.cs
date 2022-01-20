@@ -1,4 +1,5 @@
-﻿using Dio.MiniRPG.src.Entities;
+﻿using Dio.MiniRPG.Infrastructure;
+using Dio.MiniRPG.Entities.Heroes;
 
 namespace Dio.MiniRPG
 {
@@ -6,23 +7,17 @@ namespace Dio.MiniRPG
     {
         static void Main(string[] args)
         {
-            Hero heroi = new Hero("arus", "warrior", 4);
-            Console.WriteLine(heroi);
+            Warrior heroi = new Warrior("arus", 6);
+            Warrior vilao = new Warrior("vilao", 5);
 
-            Hero vilao = new Hero("apir", "deathclaw", 3);
-            Console.WriteLine(vilao);
+            Console.Write(heroi);
+            Console.Write(vilao);
+            heroi.Act(0, new ICharacter[]{ vilao });
+            Console.Write(vilao);
 
-            heroi.Attack(vilao);
-            Console.WriteLine(heroi);
-            Console.WriteLine(vilao);
-
-            heroi.Attack(vilao);
-            Console.WriteLine(heroi);
-            Console.WriteLine(vilao);
-
-            heroi.Attack(vilao);
-            Console.WriteLine(heroi);
-            Console.WriteLine(vilao);
+            vilao.Act(1, new ICharacter[] { });
+            heroi.Act(0, new ICharacter[]{ vilao });
+            Console.Write(vilao);
         }
     }
 
