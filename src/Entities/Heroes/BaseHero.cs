@@ -5,16 +5,11 @@ namespace Dio.MiniRPG.Entities.Heroes
 {
     public abstract class BaseHero : BaseCharacter, IHero
     {
-        public HeroType HeroType { get; }
-        public abstract List<ICharacterAction> HeroActions { get; protected set; }
+        public abstract HeroType HeroType { get; }
 
-        public BaseHero(string name, HeroType heroType)
+        public BaseHero(string name)
         : base(name)
-        {
-            this.HeroType = heroType;
-        }
-
-        public void Act(int index, ICharacter[] targets) => HeroActions[index].ActionMethod(this, targets);
+        { }
 
         public override string ToString()
         {
@@ -29,7 +24,7 @@ namespace Dio.MiniRPG.Entities.Heroes
                 $"///// Actions /////\n";
             
             int i = 1;
-            this.HeroActions.ForEach((a) => { result +=
+            this.CharacterActionsList.ForEach((a) => { result +=
                 $"{i++} - {a.Name} - {a.ActionType}" +
                 $"\n{a.Description}\n\n";
             });

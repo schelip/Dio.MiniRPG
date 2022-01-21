@@ -21,9 +21,13 @@ namespace Dio.MiniRPG.Entities
         public double DEFFactor { get; protected set; }
         public double ENDFactor { get; protected set; }
 
+        public abstract List<ICharacterAction> CharacterActionsList { get; protected set; }
+
         public BaseCharacter(string name)
         : base(name)
         { }
+
+        public void Act(int index, ICharacter[] targets) => CharacterActionsList[index].ActionMethod(this, targets);
 
         public virtual void ReceiveDamage(double damagePoints) => this.HP -= Math.Min(damagePoints, this.HP);
 

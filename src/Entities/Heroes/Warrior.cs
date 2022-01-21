@@ -5,7 +5,9 @@ namespace Dio.MiniRPG.Entities.Heroes
 {
     public class Warrior : BaseHero
     {
-        public override List<ICharacterAction> HeroActions
+        public override HeroType HeroType { get => HeroType.WARRIOR; }
+
+        public override List<ICharacterAction> CharacterActionsList
         { get; protected set; } = new List<ICharacterAction>()
         {
             CharacterActions.WeaponStrike,
@@ -13,7 +15,7 @@ namespace Dio.MiniRPG.Entities.Heroes
         };
 
         public Warrior(string name, uint level = 1)
-        : base(name, HeroType.WARRIOR)
+        : base(name)
         {
             this.HP = this.MaxHP = 10;
             this.ATK = 3;
@@ -33,7 +35,7 @@ namespace Dio.MiniRPG.Entities.Heroes
             base.LevelUp();
 
             if (this.LVL == 10)
-                this.HeroActions.Add(CharacterActions.WideSlash);
+                this.CharacterActionsList.Add(CharacterActions.WideSlash);
         }
     }
 }

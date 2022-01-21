@@ -6,21 +6,20 @@ namespace Dio.MiniRPG.Entities
 {
     public delegate void CharacterActionDelegate(ICharacter actor, ICharacter[] targets);
 
-    public class CharacterAction : ICharacterAction
+    public class CharacterAction : BaseEntity, ICharacterAction
     {
-        public string Name { get; }
         public string Description { get; }
         public ActionType ActionType { get; }
         public CharacterActionDelegate ActionMethod { get; }
 
-        public CharacterAction(
+        public CharacterAction (
             string name,
             string description,
             ActionType actionType,
             CharacterActionDelegate actionMethod
         )
+        : base(name)
         {
-            this.Name = name;
             this.Description = description;
             this.ActionType = actionType;
             this.ActionMethod = actionMethod;

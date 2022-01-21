@@ -34,6 +34,11 @@ namespace Dio.MiniRPG.Infrastructure
         /// True if the character is currently in the defense stance
         /// </summary>
         bool IsDefending { get; }
+        /// <summary>
+        /// A list of all actions that the character is currently able to perform
+        /// </summary>
+        List<ICharacterAction> CharacterActionsList { get; }
+
 
         /// <summary>
         /// Decrements the health of the character

@@ -8,10 +8,6 @@ namespace Dio.MiniRPG.Infrastructure
         /// The hero's type
         /// </summary>
         HeroType HeroType { get; }
-        /// <summary>
-        /// A list of all actions that the hero is currently able to perform
-        /// </summary>
-        List<ICharacterAction> HeroActions { get; }
 
         /// <summary>
         /// Executes an action of the hero's list
