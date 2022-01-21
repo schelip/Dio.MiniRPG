@@ -6,7 +6,7 @@ namespace Dio.MiniRPG.Entities.Heroes
     public abstract class BaseHero : BaseCharacter, IHero
     {
         public HeroType HeroType { get; }
-        public abstract List<CharacterAction> HeroActions { get; protected set; }
+        public abstract List<ICharacterAction> HeroActions { get; protected set; }
 
         public BaseHero(string name, HeroType heroType)
         : base(name)
@@ -14,22 +14,25 @@ namespace Dio.MiniRPG.Entities.Heroes
             this.HeroType = heroType;
         }
 
-        public void Act(int index, ICharacter[] targets) => HeroActions[index](this, targets);
+        public void Act(int index, ICharacter[] targets) => HeroActions[index].ActionMethod(this, targets);
 
         public override string ToString()
         {
             string result = $"{this.Name} // {this.HeroType.ToString().ToUpper()}\n" +
                 $"///// Stats /////\n" +
-                $" LVL: \t{this.LVL}\n" +
+                $" LVL: \t{this.LVL}\t" +
                 $" EXP: \t{this.EXP} / {this.RequiredEXP}\n" +
-                $" HP: \t{Math.Round(this.HP)} / {Math.Round(this.MaxHP)}\n" +
+                $" HP: \t{Math.Round(this.HP)} / {Math.Round(this.MaxHP)}\t" +
                 $" ATK: \t{Math.Round(this.ATK)}\n" +
-                $" DEF: \t{Math.Round(this.DEF)}\n" +
+                $" DEF: \t{Math.Round(this.DEF)}\t" +
                 $" END: \t{Math.Round(this.END)}\n" +
                 $"///// Actions /////\n";
             
             int i = 1;
-            this.HeroActions.ForEach((a) => { result += ($" {i++} - \t{a.Method.Name}\n"); });
+            this.HeroActions.ForEach((a) => { result +=
+                $"{i++} - {a.Name} - {a.ActionType}" +
+                $"\n{a.Description}\n\n";
+            });
 
             return result;
         }

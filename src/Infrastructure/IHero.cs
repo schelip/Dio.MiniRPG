@@ -1,5 +1,4 @@
 using Dio.MiniRPG.Enum;
-using Dio.MiniRPG.Entities;
 
 namespace Dio.MiniRPG.Infrastructure
 {
@@ -12,7 +11,7 @@ namespace Dio.MiniRPG.Infrastructure
         /// <summary>
         /// A list of all actions that the hero is currently able to perform
         /// </summary>
-        List<CharacterAction> HeroActions { get; }
+        List<ICharacterAction> HeroActions { get; }
 
         /// <summary>
         /// Executes an action of the hero's list

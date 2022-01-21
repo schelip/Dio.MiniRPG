@@ -1,15 +1,15 @@
-using System.Linq;
+using Dio.MiniRPG.Infrastructure;
 using Dio.MiniRPG.Enum;
 
 namespace Dio.MiniRPG.Entities.Heroes
 {
     public class Warrior : BaseHero
     {
-        public override List<CharacterAction> HeroActions
-        { get; protected set; } = new List<CharacterAction>()
+        public override List<ICharacterAction> HeroActions
+        { get; protected set; } = new List<ICharacterAction>()
         {
             CharacterActions.WeaponStrike,
-            CharacterActions.ReadyShield
+            CharacterActions.ReadyShield,
         };
 
         public Warrior(string name, uint level = 1)
