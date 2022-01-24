@@ -15,6 +15,10 @@ namespace Dio.MiniRPG.Infrastructure
         /// </summary>
         uint EXP { get; }
         /// <summary>
+        /// Current health points
+        /// </summary>
+        double HP { get; }
+        /// <summary>
         /// Current max health stat
         /// </summary>
         double MaxHP { get; }
@@ -35,37 +39,43 @@ namespace Dio.MiniRPG.Infrastructure
         /// </summary>
         bool IsDefending { get; }
         /// <summary>
-        /// A list of all actions that the character is currently able to perform
+        /// True if the character has 0 HP
+        /// </summary>
+        bool IsDead { get; }
+        /// <summary>
+        /// A List of all actions that the character is currently able to perform
         /// </summary>
         List<ICharacterAction> CharacterActionsList { get; }
 
-
+        
+        /// <summary>
+        /// Executes an action of the hero's IList
+        /// </summary>
+        /// <param name="index">The index of the action meant to be performed</param>
+        /// <param name="targets">The targets on which the action will be performed</param>
+        bool Act(int index, params ICharacter[] targets);
         /// <summary>
         /// Decrements the health of the character
         /// </summary>
         /// <param name="damagePoints">Points to be decremented of the health</param>
-        void ReceiveDamage(double damagePoints);
+        bool ReceiveDamage(double damagePoints);
         /// <summary>
         /// Increments the health of the character
         /// </summary>
-        /// <param name="healPoints">Points to be incremented on the helth</param>
-        void HealDamage(double healPoints);
+        /// <param name="healPoints">Points to be incremented on the health</param>
+        bool HealDamage(double healPoints);
         /// <summary>
         /// Changes the character to defensive stance
         /// </summary>
-        void StartDefending();
+        bool StartDefending();
         /// <summary>
         /// Changes the character to default stance
         /// </summary>
-        void StopDefending();
+        bool StopDefending();
         /// <summary>
         /// Increments the character experience points and levels the character up if possible
         /// </summary>
         /// <param name="expPoints">The amount of experience points to be incremented</param>
-        void ReceiveExperience(uint expPoints);
-        /// <summary>
-        /// Levels the character up by one level
-        /// </summary>
-        void LevelUp();
+        bool ReceiveExperience(uint expPoints);
     }
 }

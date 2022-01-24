@@ -30,7 +30,7 @@ namespace Dio.MiniRPG.Entities.Heroes
                 this.LevelUp();
         }
 
-        public override void LevelUp()
+        protected override void LevelUp()
         {
             base.LevelUp();
 

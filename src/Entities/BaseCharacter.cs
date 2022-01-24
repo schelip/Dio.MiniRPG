@@ -11,8 +11,9 @@ namespace Dio.MiniRPG.Entities
         public double MaxHP { get; protected set; }
         public double ATK { get; protected set; }
         public double DEF { get; protected set; }
-        public bool IsDefending { get; protected set; } = false;
         public double END { get; protected set; }
+        public bool IsDefending { get; protected set; } = false;
+        public bool IsDead { get; protected set; }
 
         public uint RequiredEXP { get; protected set; } = 100;
 
@@ -27,25 +28,71 @@ namespace Dio.MiniRPG.Entities
         : base(name)
         { }
 
-        public void Act(int index, ICharacter[] targets) => CharacterActionsList[index].ActionMethod(this, targets);
-
-        public virtual void ReceiveDamage(double damagePoints) => this.HP -= Math.Min(damagePoints, this.HP);
-
-        public virtual void HealDamage(double healPoints) => this.HP += Math.Min(healPoints, this.MaxHP - this.HP);
-
-        public virtual void StartDefending() => this.IsDefending = true;
-
-        public virtual void StopDefending() => this.IsDefending = false;
-
-        public virtual void ReceiveExperience(uint expPoints)
+        public bool Act(int index, params ICharacter[] targets)
         {
+            if (this.CheckIsDead()) return false;
+            CharacterActionsList[index].Execute(this, targets);
+            return true;
+        }
+
+
+        public virtual bool ReceiveDamage(double damagePoints)
+        {
+            if (this.CheckIsDead()) return false;
+
+            this.HP -=
+                damagePoints < 0 ? 0 : // Damage nothing if negative
+                this.HP < damagePoints ? this.HP : // Damage only the maximum possible
+                damagePoints;
+
+            if (this.HP <= 0)
+            {
+                this.IsDead = true;
+                Console.WriteLine($"{this.Name} has died!");
+            }
+
+            return true;
+        }
+
+        public virtual bool HealDamage(double healPoints)
+        {
+            if (this.CheckIsDead()) return false;
+            
+            this.HP +=
+                healPoints < 0 ? 0 : // Heal nothing if negative
+                this.MaxHP - this.HP > healPoints ? this.MaxHP - this.HP : // Heal only the maximum possible
+                healPoints;
+
+            return true;
+        }
+
+        public virtual bool StartDefending()
+        {
+            if (this.CheckIsDead()) return false;
+            this.IsDefending = true;
+            return true;
+        }
+
+        public virtual bool StopDefending()
+        {
+            if (this.CheckIsDead()) return false;
+            this.IsDefending = false;
+            return true;
+        }
+
+        public virtual bool ReceiveExperience(uint expPoints)
+        {
+            if (this.CheckIsDead()) return false;
+
             this.EXP += expPoints;
 
             if (this.RequiredEXP < this.EXP)
                 this.LevelUp();
+
+            return true;
         }
 
-        public virtual void LevelUp()
+        protected virtual void LevelUp()
         {
             this.RequiredEXP += this.LVL * 50;
             this.LVL++;
@@ -57,6 +104,16 @@ namespace Dio.MiniRPG.Entities
             this.END += this.ENDFactor;
 
             this.HP = this.MaxHP;
+        }
+
+        private bool CheckIsDead()
+        {
+            if (this.IsDead)
+            {
+                Console.WriteLine($"{this.Name} is dead!");
+                return true;
+            }
+            else return false;
         }
     }
 }

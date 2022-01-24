@@ -24,10 +24,8 @@ namespace Dio.MiniRPG.Entities.Heroes
                 $"///// Actions /////\n";
             
             int i = 1;
-            this.CharacterActionsList.ForEach((a) => { result +=
-                $"{i++} - {a.Name} - {a.ActionType}" +
-                $"\n{a.Description}\n\n";
-            });
+            foreach (var a in CharacterActionsList)
+                result += $"{i++} - {a.Name}\n{a.Description}\n\n";
 
             return result;
         }

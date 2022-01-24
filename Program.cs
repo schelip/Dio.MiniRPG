@@ -1,5 +1,7 @@
 ﻿using Dio.MiniRPG.Infrastructure;
+using Dio.MiniRPG.Entities;
 using Dio.MiniRPG.Entities.Heroes;
+using Dio.MiniRPG.Entities.Enemies;
 
 namespace Dio.MiniRPG
 {
@@ -7,17 +9,10 @@ namespace Dio.MiniRPG
     {
         static void Main(string[] args)
         {
-            Warrior heroi = new Warrior("arus", 6);
-            Warrior vilao = new Warrior("vilao", 5);
-
-            Console.Write(heroi);
-            Console.Write(vilao);
-            heroi.Act(0, new ICharacter[]{ vilao });
-            Console.Write(vilao);
-
-            vilao.Act(1, new ICharacter[] { });
-            heroi.Act(0, new ICharacter[]{ vilao });
-            Console.Write(vilao);
+            GameLogic.RecruitHero(new Warrior("Arus", 5));
+            var enemies = new IEnemy[] { new Skeleton("Skeleton"), new Skeleton("Skelly"), new Skeleton("Skeletor") };
+            var level = new DungeonLevel(1, enemies);
+            level.Start();
         }
     }
 
