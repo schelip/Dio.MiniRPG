@@ -1,6 +1,9 @@
 namespace Dio.MiniRPG.Helpers
 {
-    public static class Helpers
+    /// <summary>
+    /// Static methods for displaying data and receiving user input
+    /// </summary>
+    public static class InterfaceHelpers
     {
         public static void ReadValidAnswer<T>(out T? answer, string question, params T[] validAnswers)
         where T : IConvertible

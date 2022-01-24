@@ -3,6 +3,9 @@ using Dio.MiniRPG.Infrastructure;
 
 namespace Dio.MiniRPG.Helpers
 {
+    /// <summary>
+    /// Static methods for interacting with characters
+    /// </summary>
     public static class CharacterHelpers
     {
         public static ICharacter GetWeakestCharacter(this IList<ICharacter> characters) =>
