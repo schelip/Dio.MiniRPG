@@ -12,9 +12,11 @@ namespace Dio.MiniRPG.Entities.Heroes
         {
             CharacterActions.WeaponStrike,
             CharacterActions.ReadyShield,
+            CharacterActions.WideSlash,
+            CharacterActions.WideSlash,
         };
 
-        public Warrior(string name, uint level = 1)
+        public Warrior(string name, int level = 1)
         : base(name)
         {
             this.HP = this.MaxHP = 10;

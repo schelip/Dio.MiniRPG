@@ -2,6 +2,8 @@ using Dio.MiniRPG.Enum;
 using Dio.MiniRPG.Exceptions;
 using Dio.MiniRPG.Infrastructure;
 
+using static Dio.MiniRPG.Helpers.InterfaceHelpers;
+
 namespace Dio.MiniRPG.Entities
 {
     public class CharacterAction : BaseEntity, ICharacterAction
@@ -41,6 +43,9 @@ namespace Dio.MiniRPG.Entities
                 throw new InvalidTargetsException($"{this.Name} can only affect its actor");
 
             this.ActionMethod(actor, targets);
+
+            foreach (var target in targets)
+                target.PrintCharacter();
         }
     }
 }

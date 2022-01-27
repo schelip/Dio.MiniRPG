@@ -1,20 +1,21 @@
-using System.Linq;
 using Dio.MiniRPG.Infrastructure;
+
+using static Dio.MiniRPG.Helpers.InterfaceHelpers;
 
 namespace Dio.MiniRPG.Entities
 {
     public class DungeonLevel : IDungeonLevel
     {
-        public uint Level { get; }
+        public int Level { get; }
         public IEnemy[] Enemies { get; }
 
-        public DungeonLevel(uint level)
+        public DungeonLevel(int level)
         {
             this.Level = level;
             this.Enemies = new IEnemy[] { };
         }
 
-        public DungeonLevel(uint level, IEnemy[] enemies)
+        public DungeonLevel(int level, IEnemy[] enemies)
         {
             this.Level = level;
             this.Enemies = enemies;
@@ -22,7 +23,10 @@ namespace Dio.MiniRPG.Entities
 
         public void Start()
         {
-            Console.WriteLine($"You have entered Dungeon Level {this.Level}");
+            PrintMessage($"You have entered Dungeon Level {this.Level}!");
+            Thread.Sleep(500);
+            PrintDungeonLevel(this.Level, GameLogic.Party.ToArray(), this.Enemies);
+
             var aliveEnemies = this.Enemies.Where((e) => !e.IsDead).ToList();
             GameLogic.ResetTurns();
             while (this.Enemies.Any((e) => !e.IsDead))
@@ -31,7 +35,10 @@ namespace Dio.MiniRPG.Entities
                 GameLogic.NextTurn();
                 aliveEnemies = this.Enemies.Where((e) => !e.IsDead).ToList();
                 foreach (var enemy in aliveEnemies)
+                {
+                    Thread.Sleep(500);
                     enemy.Act(GameLogic.Party.ToArray(), aliveEnemies.ToArray());
+                }
                 GameLogic.NextTurn();
             }
 
@@ -40,7 +47,7 @@ namespace Dio.MiniRPG.Entities
 
         public void Clear()
         {
-            Console.WriteLine($"Dungeon Level {this.Level} complete!");
+            PrintMessage($"Dungeon Level {this.Level} complete!");
         }
     }
 }

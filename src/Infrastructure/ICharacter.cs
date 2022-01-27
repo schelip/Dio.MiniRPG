@@ -9,11 +9,15 @@ namespace Dio.MiniRPG.Infrastructure
         /// <summary>
         /// Current level of the character
         /// </summary>
-        uint LVL { get; }
+        int LVL { get; }
         /// <summary>
         /// Current amount of experience points
         /// </summary>
-        uint EXP { get; }
+        int EXP { get; }
+        /// <summary>
+        /// The amount of EXP required to the next level up
+        /// </summary>
+        int RequiredEXP { get; }
         /// <summary>
         /// Current health points
         /// </summary>
@@ -46,8 +50,12 @@ namespace Dio.MiniRPG.Infrastructure
         /// A List of all actions that the character is currently able to perform
         /// </summary>
         List<ICharacterAction> CharacterActionsList { get; }
+        /// <summary>
+        /// The text characters lines that will represent the character
+        /// </summary>
+        string[] Sprite { get; }
 
-        
+
         /// <summary>
         /// Executes an action of the hero's IList
         /// </summary>
@@ -76,6 +84,6 @@ namespace Dio.MiniRPG.Infrastructure
         /// Increments the character experience points and levels the character up if possible
         /// </summary>
         /// <param name="expPoints">The amount of experience points to be incremented</param>
-        bool ReceiveExperience(uint expPoints);
+        bool ReceiveExperience(int expPoints);
     }
 }

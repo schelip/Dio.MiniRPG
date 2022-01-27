@@ -5,7 +5,7 @@ namespace Dio.MiniRPG.Infrastructure
         /// <summary>
         /// The cardinal value of the level
         /// </summary>
-        uint Level { get; }
+        int Level { get; }
         /// <summary>
         /// An array of the enemies in the level
         /// </summary>

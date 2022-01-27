@@ -1,6 +1,7 @@
 using Dio.MiniRPG.Enum;
-using Dio.MiniRPG.Exceptions;
 using Dio.MiniRPG.Infrastructure;
+
+using static Dio.MiniRPG.Helpers.InterfaceHelpers;
 
 namespace Dio.MiniRPG.Entities
 {
@@ -15,7 +16,7 @@ namespace Dio.MiniRPG.Entities
                 targetType: ActionTargetType.SingleTarget,
                 actionMethod: (ICharacter actor, ICharacter[] targets) =>
                 {
-                    Console.WriteLine($"{actor.Name} hit {targets[0].Name} with Weapon Strike!");
+                    PrintMessage($"{actor.Name} hit {targets[0].Name} with Weapon Strike!");
 
                     var target = targets[0];
                     double damagePoints = actor.ATK - (target.IsDefending ? target.DEF : target.END);
@@ -35,7 +36,7 @@ namespace Dio.MiniRPG.Entities
                 targetType: ActionTargetType.MultiTarget,
                 actionMethod: (ICharacter actor, ICharacter[] targets) =>
                 {
-                    Console.WriteLine(actor.Name + $" hit {targets.Count()} enemies with Wide Slash!");
+                    PrintMessage(actor.Name + $" hit {targets.Count()} enemies with Wide Slash!");
 
                     foreach (var target in targets)
                     {
@@ -55,7 +56,7 @@ namespace Dio.MiniRPG.Entities
                 targetType: ActionTargetType.Reflective,
                 actionMethod: (ICharacter actor, ICharacter[] targets) =>
                 {
-                    Console.WriteLine(actor.Name + " prepared his shield!");
+                    PrintMessage(actor.Name + " prepared his shield!");
                     actor.StartDefending();
                 }
             );

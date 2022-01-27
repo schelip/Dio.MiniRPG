@@ -1,12 +1,14 @@
 using Dio.MiniRPG.Infrastructure;
 
+using static Dio.MiniRPG.Helpers.InterfaceHelpers;
+
 namespace Dio.MiniRPG.Entities
 {
     public abstract class BaseCharacter : BaseEntity, ICharacter
     {
 
-        public uint LVL { get; protected set; } = 1;
-        public uint EXP { get; protected set; }
+        public int LVL { get; protected set; } = 1;
+        public int EXP { get; protected set; }
         public double HP { get; protected set; }
         public double MaxHP { get; protected set; }
         public double ATK { get; protected set; }
@@ -15,18 +17,22 @@ namespace Dio.MiniRPG.Entities
         public bool IsDefending { get; protected set; } = false;
         public bool IsDead { get; protected set; }
 
-        public uint RequiredEXP { get; protected set; } = 100;
+        public int RequiredEXP { get; protected set; } = 100;
 
         public double MaxHPFactor { get; protected set; }
         public double ATKFactor { get; protected set; }
         public double DEFFactor { get; protected set; }
         public double ENDFactor { get; protected set; }
 
+        public string[] Sprite { get; }
+
         public abstract List<ICharacterAction> CharacterActionsList { get; protected set; }
 
         public BaseCharacter(string name)
         : base(name)
-        { }
+        {
+            this.Sprite = GetSprite($"characters\\{this.GetType().Name}");
+        }
 
         public bool Act(int index, params ICharacter[] targets)
         {
@@ -40,15 +46,17 @@ namespace Dio.MiniRPG.Entities
         {
             if (this.CheckIsDead()) return false;
 
-            this.HP -=
+            double damage =
                 damagePoints < 0 ? 0 : // Damage nothing if negative
                 this.HP < damagePoints ? this.HP : // Damage only the maximum possible
                 damagePoints;
 
+            this.HP -= damage;
+
             if (this.HP <= 0)
             {
                 this.IsDead = true;
-                Console.WriteLine($"{this.Name} has died!");
+                PrintMessage($"{this.Name} has died!");
             }
 
             return true;
@@ -57,7 +65,7 @@ namespace Dio.MiniRPG.Entities
         public virtual bool HealDamage(double healPoints)
         {
             if (this.CheckIsDead()) return false;
-            
+
             this.HP +=
                 healPoints < 0 ? 0 : // Heal nothing if negative
                 this.MaxHP - this.HP > healPoints ? this.MaxHP - this.HP : // Heal only the maximum possible
@@ -80,7 +88,7 @@ namespace Dio.MiniRPG.Entities
             return true;
         }
 
-        public virtual bool ReceiveExperience(uint expPoints)
+        public virtual bool ReceiveExperience(int expPoints)
         {
             if (this.CheckIsDead()) return false;
 
@@ -110,7 +118,7 @@ namespace Dio.MiniRPG.Entities
         {
             if (this.IsDead)
             {
-                Console.WriteLine($"{this.Name} is dead!");
+                PrintMessage($"{this.Name} is dead!");
                 return true;
             }
             else return false;
