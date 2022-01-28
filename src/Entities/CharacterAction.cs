@@ -1,8 +1,7 @@
 using Dio.MiniRPG.Enum;
-using Dio.MiniRPG.Exceptions;
 using Dio.MiniRPG.Infrastructure;
 
-using static Dio.MiniRPG.Helpers.InterfaceHelpers;
+using static Dio.MiniRPG.View.CharacterView;
 
 namespace Dio.MiniRPG.Entities
 {
@@ -31,16 +30,16 @@ namespace Dio.MiniRPG.Entities
         public void Execute(ICharacter actor, params ICharacter[] targets)
         {
             if (TargetType == ActionTargetType.SingleTarget && targets.Count() != 1)
-                throw new InvalidTargetsException($"{this.Name} can only hit one target");
+                throw new ArgumentException($"{this.Name} can only hit one target");
 
             if (TargetType == ActionTargetType.MultiTarget && targets.Count() < 1)
-                throw new InvalidTargetsException($"{this.Name} needs at least one target");
+                throw new ArgumentException($"{this.Name} needs at least one target");
             
             if (TargetType == ActionTargetType.Friendly && actor.GetType() != targets.GetType())
-                throw new InvalidTargetsException($"{this.Name} can only affect the actor's party");
+                throw new ArgumentException($"{this.Name} can only affect the actor's party");
             
             if (TargetType == ActionTargetType.Reflective && targets.Count() != 0)
-                throw new InvalidTargetsException($"{this.Name} can only affect its actor");
+                throw new ArgumentException($"{this.Name} can only affect its actor");
 
             this.ActionMethod(actor, targets);
 

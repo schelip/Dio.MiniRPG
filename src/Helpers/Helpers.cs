@@ -23,7 +23,7 @@ namespace Dio.MiniRPG.Helpers
             foreach (var word in str.Split(" "))
             {
                 if (chunk.Length + word.Length <= chunkLength)
-                    chunk += word +  " ";
+                    chunk += word + " ";
                 else
                 {
                     yield return chunk;
@@ -31,6 +31,14 @@ namespace Dio.MiniRPG.Helpers
                 }
             }
             yield return chunk;
+        }
+
+        public static string Truncate(this string str, int maxLength)
+        {
+            if (string.IsNullOrEmpty(str))
+                return str;
+
+            return str.Substring(0, Math.Min(str.Length, maxLength));
         }
 
         public static void Flush()

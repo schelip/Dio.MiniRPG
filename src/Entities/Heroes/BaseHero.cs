@@ -11,23 +11,7 @@ namespace Dio.MiniRPG.Entities.Heroes
         : base(name)
         { }
 
-        public override string ToString()
-        {
-            string result = $"{this.Name} // {this.HeroType.ToString().ToUpper()}\n" +
-                $"///// Stats /////\n" +
-                $" LVL: \t{this.LVL}\t" +
-                $" EXP: \t{this.EXP} / {this.RequiredEXP}\n" +
-                $" HP: \t{Math.Round(this.HP)} / {Math.Round(this.MaxHP)}\t" +
-                $" ATK: \t{Math.Round(this.ATK)}\n" +
-                $" DEF: \t{Math.Round(this.DEF)}\t" +
-                $" END: \t{Math.Round(this.END)}\n" +
-                $"///// Actions /////\n";
-            
-            int i = 1;
-            foreach (var a in CharacterActionsList)
-                result += $"{i++} - {a.Name}\n{a.Description}\n\n";
-
-            return result;
-        }
-}
+        
+        public override string ToString() => $"{this.Name} LVL{this.LVL} {this.HeroType.ToString().ToUpper()}";
+    }
 }

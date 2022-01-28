@@ -1,7 +1,8 @@
 using Dio.MiniRPG.Enum;
 using Dio.MiniRPG.Infrastructure;
 
-using static Dio.MiniRPG.Helpers.InterfaceHelpers;
+using static Dio.MiniRPG.Helpers.ViewHelpers;
+using static Dio.MiniRPG.View.CharacterView;
 
 namespace Dio.MiniRPG.Entities
 {
@@ -17,8 +18,7 @@ namespace Dio.MiniRPG.Entities
         {
             foreach (var hero in Party.Where((h) => !h.IsDead))
             {
-                SelectCharacter(hero);
-                PrintHeroInfo(hero);
+                hero.SelectCharacter();
 
                 var action = GetAction();
 
@@ -31,7 +31,7 @@ namespace Dio.MiniRPG.Entities
                 else if (action.TargetType == ActionTargetType.Reflective)
                     action.Execute(hero);
 
-                UnselectCharacter(hero);
+                hero.DeselectCharacter();
                 if (enemies.All((e) => e.IsDead))
                     break;
             }

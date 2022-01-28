@@ -1,6 +1,7 @@
 using Dio.MiniRPG.Infrastructure;
 
-using static Dio.MiniRPG.Helpers.InterfaceHelpers;
+using static Dio.MiniRPG.View.DungeonView;
+using static Dio.MiniRPG.Helpers.ViewHelpers;
 
 namespace Dio.MiniRPG.Entities
 {
@@ -24,7 +25,6 @@ namespace Dio.MiniRPG.Entities
         public void Start()
         {
             PrintMessage($"You have entered Dungeon Level {this.Level}!");
-            Thread.Sleep(500);
             PrintDungeonLevel(this.Level, GameLogic.Party.ToArray(), this.Enemies);
 
             var aliveEnemies = this.Enemies.Where((e) => !e.IsDead).ToList();

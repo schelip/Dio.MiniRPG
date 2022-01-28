@@ -1,7 +1,7 @@
 using Dio.MiniRPG.Enum;
 using Dio.MiniRPG.Infrastructure;
 
-using static Dio.MiniRPG.Helpers.InterfaceHelpers;
+using static Dio.MiniRPG.Helpers.ViewHelpers;
 
 namespace Dio.MiniRPG.Entities
 {

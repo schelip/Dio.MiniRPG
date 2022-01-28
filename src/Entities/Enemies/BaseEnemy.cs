@@ -1,5 +1,4 @@
 using Dio.MiniRPG.Enum;
-using Dio.MiniRPG.Exceptions;
 using Dio.MiniRPG.Infrastructure;
 
 using static Dio.MiniRPG.Helpers.CharacterHelpers;
@@ -39,18 +38,7 @@ namespace Dio.MiniRPG.Entities.Enemies
             ActStrongestOrParty(heroes, ActionType.Offensive);
         }
 
-        public override string ToString()
-        {
-            return $"{this.Name.ToUpper()}" +
-                $"///// Stats /////\n" +
-                $" LVL: \t{this.LVL}\t" +
-                $" EXP: \t{this.EXP} / {this.RequiredEXP}\n" +
-                $" HP: \t{Math.Round(this.HP)} / {Math.Round(this.MaxHP)}\t" +
-                $" ATK: \t{Math.Round(this.ATK)}\n" +
-                $" DEF: \t{Math.Round(this.DEF)}\t" +
-                $" END: \t{Math.Round(this.END)}\n" +
-                $"///// Actions /////\n";
-        }
+        public override string ToString() => $"{this.Name} LVL{this.LVL} {this.GetType().Name.ToUpper()}";
 
         /// <summary>
         /// Searches the character actions for the ActionType and either applies it to the weakest member of the party or the whole party
@@ -84,7 +72,7 @@ namespace Dio.MiniRPG.Entities.Enemies
                 else
                     return false;
             }
-            catch (InvalidTargetsException)
+            catch (ArgumentException)
             {
                 return false;
             }
@@ -124,7 +112,7 @@ namespace Dio.MiniRPG.Entities.Enemies
                 else
                     return false;
             }
-            catch (InvalidTargetsException)
+            catch (ArgumentException)
             {
                 return false;
             }
