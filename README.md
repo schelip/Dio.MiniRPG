@@ -20,6 +20,8 @@ Pretende-se implementar:
 - Diferentes "seções" da dungeon, com elementos gráficos e bosses
 - Itens consumíveis e habilidades com efeitos temporários
 
+Contribuições são bem vindas!
+
 ## Rodando o projeto
 
 Para iniciar o projeto:
