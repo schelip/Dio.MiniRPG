@@ -202,7 +202,9 @@ namespace Dio.MiniRPG.View
                 return false;
             }
 
-            if (!OperatingSystem.IsWindows())
+            if (
+                (Console.WindowWidth != _dimensions.width || Console.WindowHeight < _dimensions.height)
+                && !OperatingSystem.IsWindows())
             {
                 Console.WriteLine(
                     "This program needs to a console with exactly 120 columns and at least 50 rows" +
