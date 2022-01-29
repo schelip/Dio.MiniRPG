@@ -25,6 +25,12 @@ namespace Dio.MiniRPG.View
             else throw new ArgumentException("The character could not be casted to a printable object");
         }
 
+        /// <summary>
+        /// Plays an animation overlaying a character
+        /// </summary>
+        /// <param name="character">The character where to play the animation</param>
+        /// <param name="frames">The animation's frames</param>
+        /// <exception cref="ArgumentException">When the character is not of a printable class</exception>
         public static void PlayAnimation(this ICharacter character, IEnumerable<string[]> frames)
         {
             if ((character as IHero) != null)
