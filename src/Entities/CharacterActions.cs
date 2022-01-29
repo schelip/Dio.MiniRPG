@@ -1,7 +1,7 @@
 using Dio.MiniRPG.Enum;
 using Dio.MiniRPG.Infrastructure;
 
-using static Dio.MiniRPG.Helpers.ViewHelpers;
+using static Dio.MiniRPG.View.BaseView;
 
 namespace Dio.MiniRPG.Entities
 {
@@ -14,6 +14,7 @@ namespace Dio.MiniRPG.Entities
                 description: "Hit one enemy with a sharp strike from your weapon, breaking its defense",
                 actionType: ActionType.Offensive,
                 targetType: ActionTargetType.SingleTarget,
+                animationPath: "WeaponStrike",
                 actionMethod: (ICharacter actor, ICharacter[] targets) =>
                 {
                     PrintMessage($"{actor.Name} hit {targets[0].Name} with Weapon Strike!");
@@ -22,7 +23,6 @@ namespace Dio.MiniRPG.Entities
                     double damagePoints = actor.ATK - (target.IsDefending ? target.DEF : target.END);
                     target.ReceiveDamage(damagePoints);
                     if (!target.IsDead) target.StopDefending();
-
                 }
             );
         }
@@ -34,6 +34,7 @@ namespace Dio.MiniRPG.Entities
                 description: "Hit all the enemies with a slash from your weapon",
                 actionType: ActionType.Offensive,
                 targetType: ActionTargetType.MultiTarget,
+                animationPath: "WeaponStrike",
                 actionMethod: (ICharacter actor, ICharacter[] targets) =>
                 {
                     PrintMessage(actor.Name + $" hit {targets.Count()} enemies with Wide Slash!");
@@ -54,6 +55,7 @@ namespace Dio.MiniRPG.Entities
                 description: "Ready your shield, entering the defensive stance to reduce damage",
                 actionType: ActionType.Defensive,
                 targetType: ActionTargetType.Reflective,
+                animationPath: "ReadyShield",
                 actionMethod: (ICharacter actor, ICharacter[] targets) =>
                 {
                     PrintMessage(actor.Name + " prepared his shield!");

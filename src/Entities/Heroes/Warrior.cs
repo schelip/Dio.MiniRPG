@@ -13,7 +13,6 @@ namespace Dio.MiniRPG.Entities.Heroes
             CharacterActions.WeaponStrike,
             CharacterActions.ReadyShield,
             CharacterActions.WideSlash,
-            CharacterActions.WideSlash,
         };
 
         public Warrior(string name, int level = 1)

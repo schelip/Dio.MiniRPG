@@ -1,21 +1,31 @@
 using Dio.MiniRPG.Infrastructure;
 
 using static Dio.MiniRPG.Helpers.Helpers;
-using static Dio.MiniRPG.Helpers.ViewHelpers;
+using static Dio.MiniRPG.View.BaseView;
 
 namespace Dio.MiniRPG.View
 {
+    /// <summary>
+    /// Functions specific to printing enemies
+    /// </summary>
     public static partial class CharacterView
     {
-        private static IDictionary<Coords, IEnemy?> _enemies =
-            new Dictionary<Coords, IEnemy?>
+        /// <summary>
+        /// The possible coordinates for printing enemies
+        /// </summary>
+        private static IDictionary<(int left, int top), IEnemy?> _enemies =
+            new Dictionary<(int left, int top), IEnemy?>
             {
-                { new Coords(90, 18), null },
-                { new Coords(80, 20), null },
-                { new Coords(90, 25), null },
-                { new Coords(80, 27), null }
+                { (90, 18), null },
+                { (80, 20), null },
+                { (90, 25), null },
+                { (80, 27), null }
             };
 
+        /// <summary>
+        /// Prints an enemy in the appropriate coordinates
+        /// </summary>
+        /// <param name="enemy">The enemy to be printed</param>
         public static void PrintCharacter(this IEnemy enemy)
         {
             var coords = _enemies.GetCoords(enemy);
@@ -23,12 +33,25 @@ namespace Dio.MiniRPG.View
             _enemies[coords] = enemy;
         }
 
+        /// <summary>
+        /// Highlights a printed enemy
+        /// </summary>
+        /// <param name="enemy">The enemy to be selected</param>
         public static void SelectCharacter(this IEnemy enemy) =>
             enemy.HighlightCharacter(_enemies.GetCoords(enemy));
 
+        /// <summary>
+        /// Unhighlights a printed enemy
+        /// </summary>
+        /// <param name="enemy">The enemy to be deselected</param>
         public static void DeselectCharacter(this IEnemy enemy) =>
             enemy.UnhighlightCharacter(_enemies.GetCoords(enemy));
 
+        /// <summary>
+        /// Receives user input to select a target between the currently alive printed enemies
+        /// </summary>
+        /// <returns>The selected target</returns>
+        /// <exception cref="InvalidOperationException">If there are no available targets</exception>
         public static IEnemy GetTarget()
         {
             var aliveTargets = (
@@ -65,6 +88,7 @@ namespace Dio.MiniRPG.View
                 input = Console.ReadKey(true).Key;
             }
             aliveTargets[selected].DeselectCharacter();
+
             ResetCursor();
             return aliveTargets[selected];
         }

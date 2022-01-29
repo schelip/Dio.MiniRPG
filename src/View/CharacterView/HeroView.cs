@@ -1,29 +1,42 @@
 using Dio.MiniRPG.Infrastructure;
 
 using static Dio.MiniRPG.Helpers.Helpers;
-using static Dio.MiniRPG.Helpers.ViewHelpers;
+using static Dio.MiniRPG.View.BaseView;
 
 namespace Dio.MiniRPG.View
 {
+    /// <summary>
+    /// The functions specific to printing heroes
+    /// </summary>
     public static partial class CharacterView
     {
-        private static IDictionary<Coords, IHero?> _heroes =
-            new Dictionary<Coords, IHero?>
+        /// <summary>
+        /// The available coordinates for heroes to be printed
+        /// </summary>
+        private static IDictionary<(int left, int top), IHero?> _heroes =
+            new Dictionary<(int left, int top), IHero?>
             {
-                { new Coords(25, 18), null },
-                { new Coords(35, 20), null },
-                { new Coords(25, 25), null },
-                { new Coords(35, 27), null },
+                { (25, 18), null },
+                { (35, 20), null },
+                { (25, 25), null },
+                { (35, 27), null },
             };
-        private static IDictionary<Coords, ICharacterAction?> _actions =
-            new Dictionary<Coords, ICharacterAction?>
+        /// <summary>
+        /// The available coordinates for a hero's actions to be printed
+        /// </summary>
+        private static IDictionary<(int left, int top), ICharacterAction?> _heroActions =
+            new Dictionary<(int left, int top), ICharacterAction?>
             {
-                { new Coords(64, 40), null },
-                { new Coords(90, 40), null },
-                { new Coords(64, 44), null },
-                { new Coords(90, 44), null },
+                { (64, 40), null },
+                { (90, 40), null },
+                { (64, 44), null },
+                { (90, 44), null },
             };
 
+        /// <summary>
+        /// Prints a hero in the appropriate coordinates
+        /// </summary>
+        /// <param name="hero">The hero to be printed</param>
         public static void PrintCharacter(this IHero hero)
         {
             var coords = _heroes.GetCoords(hero);
@@ -31,6 +44,10 @@ namespace Dio.MiniRPG.View
             hero.PrintCharacter(coords);
         }
 
+        /// <summary>
+        /// Highlights a hero and prints its info and actions
+        /// </summary>
+        /// <param name="hero">The hero to be selected</param>
         public static void SelectCharacter(this IHero hero)
         {
             var coords = _heroes.GetCoords(hero);
@@ -51,6 +68,10 @@ namespace Dio.MiniRPG.View
             if (hero.CharacterActionsList.Count() > 0) SelectAction(0);
         }
 
+        /// <summary>
+        /// Unhighlights a hero and clears its info and actions from the screen
+        /// </summary>
+        /// <param name="hero"></param>
         public static void DeselectCharacter(this IHero hero)
         {
             var coords = _heroes.FirstOrDefault((e) => e.Value == hero).Key;
@@ -58,11 +79,16 @@ namespace Dio.MiniRPG.View
             ResetActions();
         }
 
+        /// <summary>
+        /// Receives user input to select an action between a hero's actions list
+        /// </summary>
+        /// <returns>The selected action</returns>
+        /// <exception cref="InvalidOperationException">If the hero has no actions</exception>
         public static ICharacterAction GetAction()
         {
-            var count = _actions.Count((e) => e.Value != null);
+            var count = _heroActions.Count((e) => e.Value != null);
             if (count == 0)
-                throw new InvalidOperationException("The character has no actions");
+                throw new InvalidOperationException("The hero has no actions");
 
             var selected = 0;
             var action = SelectAction(selected);
@@ -112,49 +138,68 @@ namespace Dio.MiniRPG.View
             return action;
         }
 
+        /// <summary>
+        /// Prints a hero's action in the appropriate coordinates
+        /// </summary>
+        /// <param name="action">The action to be printed</param>
+        /// <param name="isSelected">True if the action should be highlighted</param>
         private static void PrintAction(this ICharacterAction action, bool isSelected = false)
         {
-            var coords = _actions.GetCoords(action);
+            var coords = _heroActions.GetCoords(action);
 
             if (isSelected)
                 PrintDescription(action.Description);
 
-            Console.BackgroundColor = isSelected ? ConsoleColor.DarkGray : ConsoleColor.White;
-            Console.ForegroundColor = isSelected ? ConsoleColor.White : ConsoleColor.Black;
+            var bg = isSelected ? ConsoleColor.DarkGray : ConsoleColor.White;
+            var fg = isSelected ? ConsoleColor.White : ConsoleColor.Black;
             for (int j = 0; j < 3; j++)
             {
-                Console.SetCursorPosition(coords.Left, coords.Top + j);
-                Console.Write(new string(' ', 20));
+                Console.SetCursorPosition(coords.left, coords.top + j);
+                Write(new string(' ', 20), bg, fg);
             }
-            Console.SetCursorPosition(coords.Left + (20 - action.Name.Length) / 2, coords.Top + 1);
-            Console.Write(new string(action.Name));
+            Console.SetCursorPosition(coords.left + (20 - action.Name.Length) / 2, coords.top + 1);
+            Write(new string(action.Name), bg, fg);
 
-            _actions[coords] = action;
+            _heroActions[coords] = action;
             ResetCursor();
         }
 
+        /// <summary>
+        /// Clears the actions from the coordinates map
+        /// </summary>
         private static void ResetActions()
         {
-            foreach (var key in _actions.Keys)
-                _actions[key] = null;
+            foreach (var key in _heroActions.Keys)
+                _heroActions[key] = null;
         }
 
+        /// <summary>
+        /// Highlights a printed action and prints its description
+        /// </summary>
+        /// <param name="index">Which of the actions should be selected</param>
+        /// <returns>The action that was selected</returns>
+        /// <exception cref="ArgumentException">If the index was invalid</exception>
         private static ICharacterAction SelectAction(int index)
         {
-            var action = _actions.ElementAt(index).Value
-                ?? throw new IndexOutOfRangeException();
-            
+            var action = _heroActions.ElementAt(index).Value
+                ?? throw new ArgumentException();
+
             action.PrintAction(true);
             PrintDescription(action.Description);
-            
+
             return action;
         }
 
+        /// <summary>
+        /// Unhighlits a printed action and clears its description
+        /// </summary>
+        /// <param name="index">Which of the actions should be unselected</param>
+        /// <exception cref="ArgumentException">If the index was invalid</exception>
         private static void UnselectAction(int index)
         {
-            var action = _actions.ElementAt(index).Value
-                ?? throw new IndexOutOfRangeException();
-            
+            var action = _heroActions.ElementAt(index).Value
+                ?? throw new ArgumentException();
+
             action.PrintAction(false);
             PrintDescription("");
         }

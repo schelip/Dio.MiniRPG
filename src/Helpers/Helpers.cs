@@ -46,5 +46,8 @@ namespace Dio.MiniRPG.Helpers
             while (Console.KeyAvailable)
                 Console.ReadKey(true);
         }
+
+        public static string Longest(this string[] arr) =>
+            arr.Aggregate(string.Empty, (curr, n) => n.Length > curr.Length ? n : curr);
     }
 }
